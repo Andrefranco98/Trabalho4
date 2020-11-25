@@ -17,4 +17,12 @@ class LoginActivity: AppCompatActivity()  {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
+
+
+
+    fun Button_Login(view: View) {
+        val intent = Intent(this, MapsActivity::class.java)
+     startActivity(intent)
+}
+
 }
