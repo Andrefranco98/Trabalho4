@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Trabalho 3</string>
+    <string name="hint_word">Nota...</string>
+    <string name="hint_priority">Prioridade (Alta / Media / Baixa)</string>
+    <string name="button_save">Guardar</string>
+    <string name="empty_not_saved">Nao salvou, campo vazio</string>
+    <string name="add_note">Adiciona Nota</string>
+    <string name="opt2">Editar</string>
+    <string name="opt1">Remover todas as notas</string>
+</resources>
