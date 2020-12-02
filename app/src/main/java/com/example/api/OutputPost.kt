@@ -1,4 +1,6 @@
 package com.example.api
 
-class OutputPost {
-}
+class OutputPost (
+    val error: Boolean,
+    val title :String
+)

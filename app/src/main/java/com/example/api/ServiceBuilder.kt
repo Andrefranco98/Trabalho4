@@ -4,13 +4,12 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object ServiceBuilder {
 
     object ServiceBuilder {
         private val client = OkHttpClient.Builder().build()
 
         private val retrofit = Retrofit.Builder()
-                .baseUrl("https://nazarene-safeguard.000webhostapp.com/mySlim/api/")
+                .baseUrl("https://nazarene-safeguard.000webhostapp.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()
@@ -19,4 +18,3 @@ object ServiceBuilder {
             return retrofit.create(service)
         }
     }
-}
