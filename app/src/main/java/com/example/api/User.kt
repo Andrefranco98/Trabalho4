@@ -6,3 +6,11 @@ data class User(
     val password: String,
 
     )
+
+data class Problema(
+        val id: Int,
+        val lat: String,
+        val lon: String,
+        val user_id: Int,
+        val descr: String
+)

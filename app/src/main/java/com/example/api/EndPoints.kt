@@ -5,6 +5,14 @@ import retrofit2.http.*
 
 interface EndPoints {
 
+    @GET("/mySlim/api/problemas")
+    fun getProblema():Call<List<Problema>>
+
+
+
+
+
+
     @FormUrlEncoded
     @POST("/mySlim/api/user")
     fun loginPost(
