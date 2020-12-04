@@ -1,14 +1,19 @@
 package com.example
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import com.example.api.EndPoints
 import com.example.api.OutputPost
 import com.example.api.Problema
 import com.example.api.ServiceBuilder
 import com.example.trabalho1.R
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -24,26 +29,40 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var problems: List<Problema>
+    private lateinit var lastLocation: Location
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment
+            .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        //initialize fusedLocationClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
 
         val request = ServiceBuilder.buildService(EndPoints::class.java)
         var call = request.getProblema()
         var position: LatLng
 
-        call.enqueue(object: retrofit2.Callback<List<Problema>>{
-            override fun onResponse(call: Call<List<Problema>>, response: Response<List<Problema>>) {
-                if(response.isSuccessful){
+        call.enqueue(object : retrofit2.Callback<List<Problema>> {
+            override fun onResponse(
+                call: Call<List<Problema>>,
+                response: Response<List<Problema>>
+            ) {
+                if (response.isSuccessful) {
                     problems = response.body()!!
-                    for ( problem in problems){
-                        position = LatLng(problem.lat.toString().toDouble(),problem.lon.toString().toDouble())
-                        mMap.addMarker(MarkerOptions().position(position).title(problem.descr.toString()))
+                    for (problem in problems) {
+                        position = LatLng(
+                            problem.lat.toString().toDouble(),
+                            problem.lon.toString().toDouble()
+                        )
+                        mMap.addMarker(
+                            MarkerOptions().position(position).title(problem.descr.toString())
+                        )
                     }
 
                 }
@@ -51,17 +70,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             override fun onFailure(call: Call<List<Problema>>, t: Throwable) {
 
-                    Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
 
         })
     }
-
-
-
-
-
-
 
 
     /**
@@ -73,12 +86,41 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-   override fun onMapReady(googleMap: GoogleMap) {
+    override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        setUpMap()
+    }
 
-        // Add a marker in Sydney and move the camera
-      //  val sydney = LatLng(-34.0, 151.0)
-       // mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-       // mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+    }
+
+    fun setUpMap() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+            return
+        } else {
+            //1
+            mMap.isMyLocationEnabled = true
+            //2
+            fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
+
+                if (location != null) {
+                    lastLocation = location
+                    Toast.makeText(this@MapsActivity, lastLocation.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                    val currentLatLng = LatLng(location.latitude, location.longitude)
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
+                }
+
+            }
+        }
+
     }
 }
