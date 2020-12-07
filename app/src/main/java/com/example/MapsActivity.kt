@@ -1,5 +1,6 @@
 package com.example
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -7,6 +8,9 @@ import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -33,7 +37,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var problems: List<Problema>
     private lateinit var lastLocation: Location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationRequest:LocationRequest
+    private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
     private var continenteLat: Double = 0.0
     private var continenteLong: Double = 0.0
@@ -43,7 +47,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_maps)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+                .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         //initialize fusedLocationClient
@@ -56,18 +60,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         call.enqueue(object : retrofit2.Callback<List<Problema>> {
             override fun onResponse(
-                call: Call<List<Problema>>,
-                response: Response<List<Problema>>
+                    call: Call<List<Problema>>,
+                    response: Response<List<Problema>>
             ) {
                 if (response.isSuccessful) {
                     problems = response.body()!!
                     for (problem in problems) {
                         position = LatLng(
-                            problem.lat.toString().toDouble(),
-                            problem.lon.toString().toDouble()
+                                problem.lat.toString().toDouble(),
+                                problem.lon.toString().toDouble()
                         )
                         mMap.addMarker(
-                            MarkerOptions().position(position).title(problem.descr.toString())
+                                MarkerOptions().position(position).title(problem.descr.toString())
                         )
                     }
 
@@ -125,13 +129,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     fun setUpMap() {
         if (ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+                        this,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+                    this,
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
             return
         } else {
             //1
@@ -142,7 +146,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 if (location != null) {
                     lastLocation = location
                     Toast.makeText(this@MapsActivity, lastLocation.toString(), Toast.LENGTH_SHORT)
-                        .show()
+                            .show()
                     val currentLatLng = LatLng(location.latitude, location.longitude)
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
                 }
@@ -164,6 +168,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationClient.removeLocationUpdates(locationCallback)
         Log.d("**** Andre", "onPause - removeLocationUpdates")
     }
+
     public override fun onResume() {
         super.onResume()
         startLocationUpdates()
@@ -194,4 +199,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return results[0]
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menumaps, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+
+            R.id.logout -> {
+                var token = getSharedPreferences("username", Context.MODE_PRIVATE)
+                var editor = token.edit()
+                editor.putString("username_login_atual", " ")        // Iguala valor a vazio, fica sem valor, credenciais soltas
+                editor.commit()                                     // Atualizar editor
+                val intent = Intent(this@MapsActivity, LoginActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

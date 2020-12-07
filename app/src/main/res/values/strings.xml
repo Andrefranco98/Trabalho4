@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Work 3</string>
+    <string name="app_name" translatable="false">Trabalho 4</string>
     <string name="hint_word" translatable="false">Note...</string>
     <string name="hint_priority" translatable="false">Priority( High / Medium / Low)</string>
     <string name="button_save" translatable="false">Save</string>
@@ -7,6 +7,7 @@
     <string name="add_note" translatable="false">Add note</string>
     <string name="opt2" translatable="false">Edit</string>
     <string name="opt1" translatable="false">Remove all notes</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="logout" translatable="false">sair</string>
+    <string name="title_activity_maps" translatable="false">Map</string>
 
 </resources>
