@@ -2,6 +2,7 @@ package com.example
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -86,6 +87,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15.0f))
                 findViewById<TextView>(R.id.txtcoordenadas).text = "Lat: " + loc.latitude + " - Long: " + loc.longitude
                 Log.d("**** Andre", "new location received - " + loc.latitude + " -" + loc.longitude)
+                val address = getAddress(lastLocation.latitude, lastLocation.longitude)
+                findViewById<TextView>(R.id.txtmorada).setText("Morada: " + address)
+
             }
         }
         createLocationRequest()
@@ -170,7 +174,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null /* Looper */)
     }
 
-
+    private fun getAddress(lat: Double, lng: Double): String {
+        val geocoder = Geocoder(this)
+        val list = geocoder.getFromLocation(lat, lng, 1)
+        return list[0].getAddressLine(0)
+    }
 
 
 
