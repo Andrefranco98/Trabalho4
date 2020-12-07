@@ -35,6 +35,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest:LocationRequest
     private lateinit var locationCallback: LocationCallback
+    private var continenteLat: Double = 0.0
+    private var continenteLong: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,10 +91,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.d("**** Andre", "new location received - " + loc.latitude + " -" + loc.longitude)
                 val address = getAddress(lastLocation.latitude, lastLocation.longitude)
                 findViewById<TextView>(R.id.txtmorada).setText("Morada: " + address)
+                findViewById<TextView>(R.id.txtdistancia).setText("Distância: " + calculateDistance(
+                        lastLocation.latitude, lastLocation.longitude,
+                        continenteLat, continenteLong).toString())
 
             }
         }
         createLocationRequest()
+        continenteLat = 41.7043
+        continenteLong = -8.8148
 
 
     }
@@ -180,6 +187,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return list[0].getAddressLine(0)
     }
 
-
+    fun calculateDistance(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Float {
+        val results = FloatArray(1)
+        Location.distanceBetween(lat1, lng1, lat2, lng2, results)
+// distance in meter
+        return results[0]
+    }
 
 }
