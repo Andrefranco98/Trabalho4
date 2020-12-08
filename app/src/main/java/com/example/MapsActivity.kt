@@ -41,6 +41,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var locationCallback: LocationCallback
     private var continenteLat: Double = 0.0
     private var continenteLong: Double = 0.0
+    private lateinit var lat: String
+    private lateinit var lon: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +92,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 super.onLocationResult(p0)
                 lastLocation = p0.lastLocation
                 var loc = LatLng(lastLocation.latitude, lastLocation.longitude)
+                lat = loc.latitude.toString()
+                lon = loc.longitude.toString()
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15.0f))
                 findViewById<TextView>(R.id.txtcoordenadas).text = "Lat: " + loc.latitude + " - Long: " + loc.longitude
                 Log.d("**** Andre", "new location received - " + loc.latitude + " -" + loc.longitude)
@@ -216,6 +220,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 editor.commit()                                     // Atualizar editor
                 val intent = Intent(this@MapsActivity, LoginActivity::class.java)
                 startActivity(intent)
+                true
+            }
+            R.id.AddMarker-> {
+                val intent2 = Intent(this, AddMarkerActivity::class.java)
+                intent2.putExtra("latitude",lat)
+                intent2.putExtra("longitude", lon)
+                startActivity(intent2)
                 true
             }
             else -> super.onOptionsItemSelected(item)

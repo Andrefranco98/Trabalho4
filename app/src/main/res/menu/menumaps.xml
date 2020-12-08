@@ -3,5 +3,11 @@
     <item android:id="@+id/logout"
         android:title="@string/logout" />
 
+    <item android:id="@+id/AddMarker"
+        android:title="@string/AddMarker" />
+
+    <item android:id="@+id/remove"
+        android:title="@string/RemoveMarker" />
+
 
 </menu>

@@ -7,7 +7,10 @@
     <string name="add_note" translatable="false">Add note</string>
     <string name="opt2" translatable="false">Edit</string>
     <string name="opt1" translatable="false">Remove all notes</string>
-    <string name="logout" translatable="false">sair</string>
+    <string name="logout" translatable="false">Logout</string>
     <string name="title_activity_maps" translatable="false">Map</string>
-
+    <string name="AddMarker" translatable="false">Add Marker</string>
+    <string name="RemoveMarker" translatable="false">Remove Marker</string>
+    <string name="problemDescription" translatable="false">Description</string>
+    <string name="addnow" translatable="false">Add </string>
 </resources>

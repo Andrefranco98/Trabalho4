@@ -16,7 +16,10 @@ import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Response
 
 
+
+
 class LoginActivity: AppCompatActivity()  {
+    private var id : Int=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -47,20 +50,23 @@ class LoginActivity: AppCompatActivity()  {
                 if (response.isSuccessful) {
                     if (response.body()?.error == false) {
                         val intent = Intent(this@LoginActivity, MapsActivity::class.java)
-                        Toast.makeText(this@LoginActivity, "Login efectuado", Toast.LENGTH_SHORT).show()
-
+                        val x : OutputPost= response.body()!!
+                        id = x.id
                         /// GET NAME SHARED PREFERENCES ////
-
                         var token = getSharedPreferences("username", Context.MODE_PRIVATE)
                         var editor = token.edit()
                         editor.putString("username_login_atual",username)
                         editor.commit()
-
+                        /// GET USER ID ///
+                        var tokenid = getSharedPreferences("id", Context.MODE_PRIVATE)
+                        var editorid = tokenid.edit()
+                        editorid.putInt("id_login_atual",id)
+                        editorid.commit()
+                        Toast.makeText(this@LoginActivity, "Login efectuado" + x.id, Toast.LENGTH_SHORT).show()
                         startActivity(intent)
                     }else{
                         val c: OutputPost = response.body()!!
                         Toast.makeText(this@LoginActivity, "Login falhou, credenciais erradas.", Toast.LENGTH_SHORT).show()
-
 
 
                     }
