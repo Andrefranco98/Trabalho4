@@ -6,7 +6,7 @@
     <item android:id="@+id/AddMarker"
         android:title="@string/AddMarker" />
 
-    <item android:id="@+id/remove"
+    <item android:id="@+id/removeMarker"
         android:title="@string/RemoveMarker" />
 
 

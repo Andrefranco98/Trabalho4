@@ -229,6 +229,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 startActivity(intent2)
                 true
             }
+            R.id.removeMarker-> {
+                val intent3 = Intent(this, RemoveMarkerActivity::class.java )
+                startActivity(intent3)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
