@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/olapreto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/AddMarker"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="10dp" />
+
+    <EditText
+        android:id="@+id/iduser"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="@color/white"
+        android:fontFamily="sans-serif-light"
+        android:inputType="textAutoComplete"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/lat"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/white"
+        android:fontFamily="sans-serif-light"
+        android:inputType="textAutoComplete"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+
+        />
+
+    <EditText
+        android:id="@+id/lng"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-light"
+        android:inputType="textAutoComplete"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/descr"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-light"
+        android:hint="@string/problemDescription"
+        android:inputType="text"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/button_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="110dp"
+        android:layout_marginTop="3dp"
+        android:backgroundTint="@color/purple_200"
+        android:onClick="addMarker"
+        android:text="@string/addnow"
+        android:textColor="@color/black"
+        app:backgroundTint="#C81E1E" />
+
+</LinearLayout>

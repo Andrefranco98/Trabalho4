@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Trabalho 3</string>
+    <string name="app_name">Trabalho 4</string>
     <string name="hint_word">Nota...</string>
     <string name="hint_priority">Prioridade (Alta / Media / Baixa)</string>
     <string name="button_save">Guardar</string>
@@ -8,4 +8,14 @@
     <string name="add_note">Adiciona Nota</string>
     <string name="opt2">Editar</string>
     <string name="opt1">Remover todas as notas</string>
+    <string name="logout" translatable="false">Logout</string>
+    <string name="title_activity_maps" translatable="false">Mapa</string>
+    <string name="AddMarker" translatable="false">Adicionar Marcador</string>
+    <string name="RemoveMarker" translatable="false">Remover Marcador</string>
+    <string name="problemDescription" translatable="false">Descrição</string>
+    <string name="addnow" translatable="false">Adicionar </string>
+    <string name="notes" translatable="false">Notas</string>
+    <string name="Coordinates" translatable="false">Coordenadas</string>
+    <string name="Distance" translatable="false">Distancia</string>
+    <string name="Address" translatable="false">Morada</string>
 </resources>

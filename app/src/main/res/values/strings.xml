@@ -13,4 +13,8 @@
     <string name="RemoveMarker" translatable="false">Remove Marker</string>
     <string name="problemDescription" translatable="false">Description</string>
     <string name="addnow" translatable="false">Add </string>
+    <string name="notes" translatable="false">Notes</string>
+    <string name="Coordinates" translatable="false">Coordinates</string>
+    <string name="Distance" translatable="false">Distance</string>
+    <string name="Address" translatable="false">Address</string>
 </resources>
