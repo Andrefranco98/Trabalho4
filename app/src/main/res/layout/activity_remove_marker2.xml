@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.RemoveMarkerActivity">
+    tools:context="com.example.RemoveMarkerActivity"
+    android:background="@drawable/olapreto">
 
     <Button
         android:id="@+id/removerMarcador"
@@ -17,7 +18,7 @@
         android:layout_marginRight="162dp"
         android:layout_marginBottom="309dp"
         android:onClick="remove"
-        android:text="Button"
+        android:text="Remove"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,11 +36,17 @@
         android:layout_marginRight="104dp"
         android:layout_marginBottom="15dp"
         android:ems="10"
-        android:hint="Id do Marcador"
+        android:hint="Marker Id"
         android:inputType="textPersonName"
+        android:textColor="#F7FFFFFF"
+        android:textColorHighlight="#EEFFFFFF"
+        android:textColorHint="#F4F0F0"
         app:layout_constraintBottom_toTopOf="@+id/removerMarcador"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
