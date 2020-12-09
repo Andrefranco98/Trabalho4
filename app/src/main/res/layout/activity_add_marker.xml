@@ -61,7 +61,7 @@
         android:textColor="@color/white"
         android:fontFamily="sans-serif-light"
         android:hint="@string/problemDescription"
-        android:inputType="textAutoComplete"
+        android:inputType="text"
         android:textSize="18sp" />
 
     <Button
