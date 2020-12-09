@@ -9,6 +9,8 @@ interface EndPoints {
     @GET("/mySlim/api/problemas")
     fun getProblema():Call<List<Problema>>
 
+    @GET("/mySlim/api/removermarcador/{id}")
+    fun removeMarcador(@Path("id") id: Int): Call<OutputPost>
 
     @FormUrlEncoded
     @POST("/mySlim/api/adicionarmarcador")

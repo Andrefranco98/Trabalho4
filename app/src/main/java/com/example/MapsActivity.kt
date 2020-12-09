@@ -3,11 +3,6 @@ package com.example
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.location.Geocoder
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -16,8 +11,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
-import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -33,14 +26,12 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListener {
-
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var problems: List<Problema>
@@ -52,22 +43,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
     private var continenteLong: Double = 0.0
     private lateinit var lat: String
     private lateinit var lon: String
-    var sensor : Sensor? = null
-    var sensorManager : SensorManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+                .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         //initialize fusedLocationClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensor = sensorManager!!.getDefaultSensor(Sensor.TYPE_LIGHT)
 
         val request = ServiceBuilder.buildService(EndPoints::class.java)
         var call = request.getProblema()
@@ -75,18 +62,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
         call.enqueue(object : retrofit2.Callback<List<Problema>> {
             override fun onResponse(
-                call: Call<List<Problema>>,
-                response: Response<List<Problema>>
+                    call: Call<List<Problema>>,
+                    response: Response<List<Problema>>
             ) {
                 if (response.isSuccessful) {
                     problems = response.body()!!
                     for (problem in problems) {
                         position = LatLng(
-                            problem.lat.toString().toDouble(),
-                            problem.lon.toString().toDouble()
+                                problem.lat.toString().toDouble(),
+                                problem.lon.toString().toDouble()
                         )
                         mMap.addMarker(
-                            MarkerOptions().position(position).title(problem.descr.toString())
+                                MarkerOptions().position(position).title(problem.descr.toString())
                         )
                     }
 
@@ -108,20 +95,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
                 lat = loc.latitude.toString()
                 lon = loc.longitude.toString()
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15.0f))
-                findViewById<TextView>(R.id.txtcoordenadas).text =
-                    "Lat: " + loc.latitude + " - Long: " + loc.longitude
-                Log.d(
-                    "**** Andre",
-                    "new location received - " + loc.latitude + " -" + loc.longitude
-                )
+                findViewById<TextView>(R.id.txtcoordenadas).text = "Lat: " + loc.latitude + " - Long: " + loc.longitude
+                Log.d("**** Andre", "new location received - " + loc.latitude + " -" + loc.longitude)
                 val address = getAddress(lastLocation.latitude, lastLocation.longitude)
                 findViewById<TextView>(R.id.txtmorada).setText("Morada: " + address)
-                findViewById<TextView>(R.id.txtdistancia).setText(
-                    "Distância: " + calculateDistance(
+                findViewById<TextView>(R.id.txtdistancia).setText("Distância: " + calculateDistance(
                         lastLocation.latitude, lastLocation.longitude,
-                        continenteLat, continenteLong
-                    ).toString()
-                )
+                        continenteLat, continenteLong).toString())
 
             }
         }
@@ -153,15 +133,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
     fun setUpMap() {
         if (ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+                        this,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
+                    this,
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
             return
         } else {
             //1
@@ -172,7 +150,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
                 if (location != null) {
                     lastLocation = location
                     Toast.makeText(this@MapsActivity, lastLocation.toString(), Toast.LENGTH_SHORT)
-                        .show()
+                            .show()
                     val currentLatLng = LatLng(location.latitude, location.longitude)
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
                 }
@@ -191,36 +169,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
 
     override fun onPause() {
         super.onPause()
-        sensorManager!!.unregisterListener(this)
         fusedLocationClient.removeLocationUpdates(locationCallback)
         Log.d("**** Andre", "onPause - removeLocationUpdates")
     }
 
     public override fun onResume() {
         super.onResume()
-        sensorManager!!.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL)
         startLocationUpdates()
         Log.d("**** Andre", "onResume - startLocationUpdates")
     }
 
     private fun startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
+        if (ActivityCompat.checkSelfPermission(this,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_PERMISSION_REQUEST_CODE)
             return
         }
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            null /* Looper */
-        )
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null /* Looper */)
     }
 
     private fun getAddress(lat: Double, lng: Double): String {
@@ -249,88 +216,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, SensorEventListene
             R.id.logout -> {
                 var token = getSharedPreferences("username", Context.MODE_PRIVATE)
                 var editor = token.edit()
-                editor.putString(
-                    "username_login_atual",
-                    " "
-                )        // Iguala valor a vazio, fica sem valor, credenciais soltas
+                editor.putString("username_login_atual", " ")        // Iguala valor a vazio, fica sem valor, credenciais soltas
                 editor.commit()                                     // Atualizar editor
                 val intent = Intent(this@MapsActivity, LoginActivity::class.java)
                 startActivity(intent)
                 true
             }
-            R.id.AddMarker -> {
+            R.id.AddMarker-> {
                 val intent2 = Intent(this, AddMarkerActivity::class.java)
-                intent2.putExtra("latitude", lat)
+                intent2.putExtra("latitude",lat)
                 intent2.putExtra("longitude", lon)
                 startActivity(intent2)
                 true
             }
-            // R.id.removeMarker-> {
-            //   val intent3=  Intent(this, RemoveMarkerActivity::class.java)
-            //  intent3.putExtra("")
-            //  true
-            // }
+            R.id.removeMarker-> {
+                val intent3 = Intent(this, RemoveMarkerActivity::class.java )
+                startActivity(intent3)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
-
     }
-
-
-  override fun onSensorChanged(event: SensorEvent?) {
-        try {
-
-            if (event!!.values[0] < 30) {
-
-
-                try {
-                    // Customise the styling of the base map using a JSON object defined
-                    // in a raw resource file.
-                    val success = mMap.setMapStyle(
-                        MapStyleOptions.loadRawResourceStyle(
-                            this, R.raw.mapstyle))
-                    if (!success) {
-                        Log.e("MapsActivity", "Style parsing failed.")
-                    }
-                } catch (e: Resources.NotFoundException) {
-                    Log.e("MapsActivity", "Can't find style. Error: ", e)
-                }
-
-
-
-            } else {
-
-                findViewById<FrameLayout>(R.id.map).visibility = View.VISIBLE
-                try {
-                    // Customise the styling of the base map using a JSON object defined
-                    // in a raw resource file.
-                    val success = mMap.setMapStyle(
-                        MapStyleOptions.loadRawResourceStyle(
-                            this, R.raw.mapstyle2))
-                    if (!success) {
-                        Log.e("MapsActivity", "Style parsing failed.")
-                    }
-                } catch (e: Resources.NotFoundException) {
-                    Log.e("MapsActivity", "Can't find style. Error: ", e)
-                }
-
-            }
-
-        }
-        catch (e : Exception)
-        {
-
-        }
-
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-    }
-
-
-
-
-
-
-
 }
